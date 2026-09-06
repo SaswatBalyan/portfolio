@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="theme-color" content="#fbf7f1" />
+    <meta name="description" content="A developer portfolio designed as a small desktop environment." />
+    <title>portfolio.saswatbalyan.os</title>
+    <link rel="stylesheet" href="styles.css?v=9" />
+  </head>
+  <body>
+    <main class="desktop" id="desktop">
+      <header class="status-bar" aria-label="Desktop status">
+        <div class="window-dots" aria-hidden="true">
+          <span class="dot dot-coral"></span>
+          <span class="dot dot-ink"></span>
+          <span class="dot dot-empty"></span>
+        </div>
+        <span class="machine-name">portfolio.saswatbalyan.os</span>
+        <div class="status-actions">
+          <time class="clock" id="clock">00:00</time>
+          <button class="shutdown-button" id="shutdown-button" type="button" aria-label="Reload site" title="Reload site">⏻</button>
+        </div>
+      </header>
+
+      <section class="desktop-icons" aria-label="Desktop files">
+        <button class="desktop-file" data-open="notes" type="button">
+          <span class="file-glyph file-glyph-note" aria-hidden="true"></span>
+          <span>notes.txt</span>
+        </button>
+        <button class="desktop-file" data-open="work" type="button">
+          <span class="file-glyph file-glyph-folder file-glyph-coral" aria-hidden="true"></span>
+          <span>work</span>
+        </button>
+        <button class="desktop-file social-file" data-open="social" type="button">
+          <span class="file-glyph file-glyph-globe" aria-hidden="true"></span>
+          <span>social</span>
+        </button>
+      </section>
+
+      <section class="workspace" id="workspace" aria-label="Open applications"></section>
+
+      <nav class="dock" aria-label="Portfolio applications">
+        <button class="dock-item" data-open="about" type="button">
+          <span class="dock-icon dock-icon-folder" aria-hidden="true"></span><span class="dock-label">About</span>
+        </button>
+        <button class="dock-item" data-open="resume" type="button">
+          <span class="dock-icon dock-icon-document" aria-hidden="true"></span><span class="dock-label">Resume</span>
+        </button>
+        <button class="dock-item" data-open="work" type="button">
+          <span class="dock-icon dock-icon-folder dock-icon-coral" aria-hidden="true"></span><span class="dock-label">Work</span>
+        </button>
+        <button class="dock-item" data-open="contact" type="button">
+          <span class="dock-icon dock-icon-mail" aria-hidden="true"></span><span class="dock-label">Contact</span>
+        </button>
+      </nav>
+    </main>
+
+    <section class="boot-screen" id="boot-screen" aria-label="Boot sequence">
+      <div class="boot-copy">
+        <div class="boot-header">
+          <div class="boot-system">portfolio.saswatbalyan.os</div>
+          <div class="boot-meta">GNU/Linux 6.8.0-52-generic</div>
+          <div class="boot-prompt">user@portfolio:~$</div>
+        </div>
+        <div class="boot-log" id="boot-log" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <script src="app.js"></script>
+  </body>
+</html>
