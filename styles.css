@@ -96,6 +96,15 @@ button:active { transform: translateY(1px); }
 .window-body p:last-child { margin-bottom: 0; }
 .window-body .mono { font: 12px/1.6 var(--mono); color: var(--ink-dim); }
 .about-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; align-items: start; }
+.construction-panel { display: grid; grid-template-columns: 1fr .9fr; gap: 28px; align-items: center; }
+.construction-copy h1 { max-width: 10ch; margin: 5px 0 18px; font-size: clamp(34px, 5vw, 58px); line-height: .93; letter-spacing: -0.05em; }
+.construction-copy > p:not(.mono) { max-width: 42ch; font-size: 17px; }
+.construction-sign { display: flex; align-items: center; gap: 12px; max-width: 310px; margin: 24px 0; padding: 12px; border: 2px solid var(--ink); background: var(--coral); box-shadow: 4px 5px 0 rgba(43, 38, 32, .22); font: 11px/1.4 var(--mono); transform: rotate(-2deg); }
+.construction-icon { display: grid; place-items: center; flex: 0 0 28px; width: 28px; height: 28px; border: 2px solid var(--ink); background: #f6cf64; font: 700 20px/1 var(--sans); }
+.construction-figure { position: relative; margin: 0; padding: 9px 9px 0; border: 2px solid var(--ink); background: var(--surface-raised); box-shadow: 6px 7px 0 rgba(43, 38, 32, .25); transform: rotate(2deg); }
+.construction-figure::before { position: absolute; top: -15px; left: 22%; width: 80px; height: 25px; border: 1px solid rgba(43, 38, 32, .32); background: rgba(243, 179, 111, .72); content: ''; transform: rotate(-7deg); }
+.construction-figure img { display: block; width: 100%; aspect-ratio: 5 / 4; object-fit: cover; filter: saturate(1.12) contrast(1.02); }
+.construction-figure figcaption { padding: 10px 2px 12px; color: var(--ink-dim); font: 11px var(--mono); }
 .snake-game { max-width: 520px; }
 .snake-heading { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 2px solid var(--ink); }
 .snake-brand { display: flex; align-items: center; gap: 12px; }
@@ -230,6 +239,8 @@ button:active { transform: translateY(1px); }
   .window, .window.about-window, .window.resume-window, .window.work-window, .window.contact-window, .window.notes-window { inset: 0; width: 100%; height: 100%; max-height: none; border-width: 0; animation: sheet-in 180ms ease-out both; }
   .window-body, .window.is-maximized .window-body { max-height: calc(100dvh - 86px); padding: 24px 18px 100px; }
   .about-grid { grid-template-columns: 1fr; gap: 22px; }
+  .construction-panel { grid-template-columns: 1fr; gap: 24px; }
+  .construction-copy h1 { max-width: 12ch; }
   .work-intro { grid-template-columns: 1fr; gap: 8px; }
   .resume-heading, .resume-projects { grid-template-columns: 1fr; }
   .resume-contact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
