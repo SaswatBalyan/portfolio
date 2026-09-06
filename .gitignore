@@ -1,0 +1,38 @@
+# OS & Editor
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.vscode/*
+!.vscode/mcp.json
+.idea/
+*.sublime-*
+
+# Logs & Cache
+*.log
+npm-debug.log*
+.cache/
+.eslintcache
+
+# Dependencies
+node_modules/
+bower_components/
+
+# Build output
+dist/
+build/
+out/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Test coverage
+coverage/
+
+# Misc
+*.pem
+*.bak
+*.orig
