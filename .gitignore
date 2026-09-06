@@ -36,3 +36,7 @@ coverage/
 *.pem
 *.bak
 *.orig
+
+# folders
+.vscode/
+.agents/
