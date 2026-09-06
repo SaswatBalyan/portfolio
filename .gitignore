@@ -38,5 +38,5 @@ coverage/
 *.orig
 
 # folders
-.vscode/
-.agents/
+./vscode/
+./agents/
