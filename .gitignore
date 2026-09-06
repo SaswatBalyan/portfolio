@@ -4,8 +4,7 @@ Thumbs.db
 *.swp
 *.swo
 *~
-.vscode/*
-!.vscode/mcp.json
+.vscode/
 .idea/
 *.sublime-*
 
@@ -37,6 +36,5 @@ coverage/
 *.bak
 *.orig
 
-# folders
-./vscode/
-./agents/
+# Local agent and editor configuration
+.agents/
