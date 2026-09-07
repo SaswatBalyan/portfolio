@@ -4,6 +4,7 @@ const clock = document.querySelector('#clock');
 const shutdownButton = document.querySelector('#shutdown-button');
 const bootScreen = document.querySelector('#boot-screen');
 const bootLog = document.querySelector('#boot-log');
+let bootTimers = [];
 
 const projects = [
   { id: 'krishi-sutra', name: 'krishi-sutra', type: 'offline agriculture intelligence', thumb: 'KS', tone: 'mint', stack: 'Flutter · Dart · TFLite · Drift · Appwrite', description: 'A farmer-first app that keeps weather, mandi prices, groundwater, crop roadmaps, and disease detection useful after the network drops.', details: '<strong>Architecture:</strong> Drift/SQLite is the first read path, while a Workmanager sync queue reconciles local changes with Appwrite when connectivity returns.<br><strong>Technical edge:</strong> TensorFlow Lite runs crop-disease inference locally across 38 classes; Vosk handles offline dictation, with Groq LLaMA 3.1 replies when online.<br><strong>Product detail:</strong> Cached weather, market prices, and localized flows keep the demo usable without API keys.', repo: 'https://github.com/SaswatBalyan/AgroSense-KrishiSutra' },
@@ -13,7 +14,7 @@ const projects = [
 ];
 
 const templates = {
-  about: { title: 'About', className: 'about-window', body: `<div class="construction-panel"><div class="construction-copy"><p class="mono">status: under construction</p><h1>Something good is taking shape.</h1><p>The About app is still being assembled: a little more writing, a few more experiments, and a better way to show the work between the lines.</p><div class="construction-sign"><span class="construction-icon" aria-hidden="true">!</span><span>please check back after the next build</span></div><p class="mono">For now, the Resume, Work, Social, and Contact apps are ready.</p></div><figure class="construction-figure"><img src="pfp.jpeg" alt="Profile placeholder" /><figcaption>bro is too dillydallying to finish this</figcaption></figure></div>` },
+  about: { title: 'About', className: 'about-window', body: `<div class="about-page"><section class="about-hero"><div class="about-hero-copy"><p class="mono">field notes / 2026</p><h1>Saswat<br /><span>Balyan</span></h1><p class="about-lede">Computer science student at VIT Vellore. I build AI-assisted software, offline-first products, and finance experiments that are meant to leave the notebook.</p><a class="text-button" href="mailto:saswatbalyan2711@gmail.com">Say hello ↗</a></div><figure class="about-portrait"><img src="pfp.jpeg" alt="Saswat Balyan smiling outdoors" /><figcaption>builder / student / occasional diplomat</figcaption></figure></section><section class="about-intro"><span class="about-index">01</span><div><h2>A few things I keep returning to.</h2><p>Multi-agent systems, practical machine learning, and the startup side of turning a working idea into something people actually use. I like the point where a technical decision becomes a product decision.</p></div></section><section class="about-projects"><div class="about-section-heading"><span class="about-index">02</span><h2>What I build</h2></div><div class="about-project-list"><article><span class="project-number">01</span><div><h3>TradingAgents</h3><p>Analyst agents debate fundamentals, sentiment, news, and technical signals before a trader agent sizes a position. Risk limits and backtests keep the argument measurable.</p><span class="mono">Python / LLMs / yFinance / backtesting</span></div></article><article><span class="project-number">02</span><div><h3>AgroSense</h3><p>An offline-first agricultural app for low-connectivity environments, with mandi prices, weather, crop roadmaps, 38-class on-device disease detection, and a voice interface.</p><span class="mono">Flutter / TFLite / Drift / Appwrite</span></div></article><article><span class="project-number">03</span><div><h3>PaisaProfit</h3><p>A gamified financial literacy platform with paper trading, market simulations, and AI-assisted learning, built with a React and Flask stack.</p><span class="mono">React / Flask / market data</span></div></article><article><span class="project-number">04</span><div><h3>Heart disease prediction</h3><p>A Kaggle Playground pipeline combining CatBoost, XGBoost, PyTorch embeddings, Optuna tuning, ensembling, and cross-validation.</p><span class="mono">CatBoost / XGBoost / PyTorch / Optuna</span></div></article></div></section><section class="about-split about-skills"><div><span class="about-index">03</span><h2>Tools in the drawer</h2><p>I work mostly in Python, JavaScript, Kotlin, C/C++, Java, and SQL. Around them: PyTorch, TensorFlow, scikit-learn, Transformers, OpenCV, React, Node, Django, FastAPI, Flask, Flutter, Docker, and AWS.</p></div><div class="skill-stamp"><strong>AI-native</strong><span>I treat an LLM like a boss agent: plan the structure, coordinate tools, then make the build earn its place.</span></div></section><section class="about-photo-story"><div class="about-section-heading"><span class="about-index">04</span><h2>Outside the terminal</h2></div><div class="about-photo-grid"><figure class="about-photo photo-tall"><img src="iicteam.jpeg" alt="Institute Innovation Council team outdoors" /><figcaption>Startup Domain Head · IIC, VIT Vellore</figcaption></figure><div class="about-photo-stack"><figure class="about-photo"><img src="mun.jpeg" alt="Saswat speaking at a Model UN podium" /><figcaption>International relations / Model UN</figcaption></figure><figure class="about-photo photo-award"><img src="trophy.jpeg" alt="Saswat holding a Best Delegation trophy" /><figcaption>HITSMUN · Best Delegation</figcaption></figure></div><figure class="about-photo photo-wide"><img src="hackathon.jpeg" alt="Hackathon team posing indoors" /><figcaption>hackathons, teams, and the occasional stairwell</figcaption></figure><figure class="about-photo"><img src="reversecoding.jpeg" alt="Reverse Coding certificate hand-off on stage" /><figcaption>Reverse Coding · ACM VIT</figcaption></figure></div></section><section class="about-closing"><div><span class="about-index">05</span><h2>Still curious.</h2><p>Startup work, Model UN, and hackathons keep the technical work honest: there is always another person, constraint, or point of view to account for.</p></div><div class="about-wins"><span class="mono">recent wins</span><p>1st place · IIC Hackwar</p><p>Top 10 · AGILE, IISc Bangalore</p><p>Finalist · ENIGMA, IIT BHU</p></div></section></div>` },
   resume: { title: 'Resume', className: 'resume-window', body: `<div class="resume-heading"><div><p class="mono">Saswat Balyan</p><h1>Computer science student and builder</h1><p>Frontend systems, applied machine learning, and products that make complex work easier to use.</p></div><div class="resume-contact"><a href="tel:+919041244194">+91 90412 44194</a><a href="mailto:saswatbalyan2711@gmail.com">saswatbalyan2711@gmail.com</a><a href="https://www.linkedin.com/in/saswat-balyan-349b23320" target="_blank" rel="noreferrer">LinkedIn</a><a href="https://github.com/SaswatBalyan" target="_blank" rel="noreferrer">GitHub</a><a href="https://leetcode.com/u/5gkfwYkbrA/" target="_blank" rel="noreferrer">LeetCode</a></div></div><section class="resume-section"><h2>Education</h2><div class="resume-row"><span class="resume-date">2024 - present</span><div><p class="resume-role">B.Tech, Computer Science and Engineering</p><p>Vellore Institute of Technology, Vellore · CGPA 8.9/10</p><p class="mono">JEE Advanced 2024: 16484 · JEE Mains: 96 percentile · 12th: 80% · 10th: 94%</p></div></div></section><section class="resume-section"><h2>Experience</h2><div class="resume-row"><span class="resume-date">2026 - present</span><div><p class="resume-role">Startup Domain Head · Institute's Innovation Council, VIT Vellore</p><p>Guiding students on incubation opportunities, startup competitions, and government innovation schemes while collaborating with student teams and institute mentors.</p></div></div></section><section class="resume-section"><h2>Selected projects</h2><div class="resume-projects"><div><p class="resume-role">TradingAgents</p><p class="mono">Python · LLMs · multi-agent systems · yFinance</p><p>Built a multi-agent trading framework with fundamental, sentiment, news, and technical analysts, plus risk controls and backtesting.</p></div><div><p class="resume-role">AgroSense - KrishiSutra</p><p class="mono">Flutter · TensorFlow Lite · SQLite · Appwrite · LLaMA 3.1</p><p>Created an offline-first agricultural intelligence app with crop-disease detection, local persistence, sync queues, voice input, and an AI assistant.</p></div><div><p class="resume-role">PaisaProfit</p><p class="mono">React · Flask · Python · AI · finance</p><p>Built a gamified financial literacy platform with AI-assisted learning, paper trading, simulations, and live market visualizations.</p></div><div><p class="resume-role">Heart disease prediction</p><p class="mono">Python · CatBoost · XGBoost · PyTorch · Optuna</p><p>Developed reusable experimentation pipelines with feature engineering, ensemble learning, cross-validation, and Bayesian optimization.</p></div></div></section><section class="resume-section"><h2>Technical skills</h2><p><strong>Languages:</strong> Python, JavaScript, Kotlin, SQL, R, C, C++, Java, ASM</p><p><strong>ML:</strong> PyTorch, TensorFlow, Keras, scikit-learn, Hugging Face, OpenCV, Pandas, NumPy</p><p><strong>Web and platforms:</strong> React, Node.js, Django, FastAPI, Flask, Flutter, Android, Docker, Git, AWS</p></section><section class="resume-section"><h2>Awards and leadership</h2><p>Track winner, IIC Hackwar · Top 10, AGILE by Pravega IISc Bangalore · Rank 79, ENIGMA Codefest'26 IIT BHU · Finalist, Reverse Coding ACM VIT.</p><p>Member, International Relations Committee, VIT. Delegated at VITMUN, HITSMUN, and SRMMUN.</p></section><p class="resume-source mono">Source: <a href="https://flowcv.com/resume/i2g20clnk5p0" target="_blank" rel="noreferrer">shareable resume</a></p><a class="text-button" href="resume.pdf" download="resume.pdf" data-action="download">Save as PDF</a>` },
   work: { title: 'Work', className: 'work-window', body: `<div class="work-intro"><p class="mono">A small cabinet of things I built, tested, and kept.</p><h1>Projects with a pulse.</h1><p>Open a file to inspect the idea, the stack, and the trail back to its source.</p></div><div class="file-grid">${projects.map((project) => `<button class="project-file project-file-${project.tone}" type="button" data-project="${project.id}"><span class="project-thumb">${project.thumb}</span><span class="project-meta"><span class="project-name">${project.name}</span><span class="project-type">${project.type}</span><span class="project-stack">${project.stack}</span></span></button>`).join('')}</div>` },
   contact: { title: 'Contact', className: 'contact-window', body: `<div class="form-stack"><div><h2>Send a note</h2><p>Your message will open in your email app addressed to Saswat.</p></div><form class="contact-form"><div class="field"><label for="contact-email">Your email</label><input id="contact-email" type="email" required /></div><div class="field"><label for="contact-subject">What's this about?</label><input id="contact-subject" required /></div><div class="field"><label for="contact-message">Message</label><textarea id="contact-message" required></textarea></div><button class="send-button" type="submit">Open email</button><p class="form-status mono" aria-live="polite"></p></form></div>` },
@@ -81,6 +82,23 @@ function renderWindow(id) {
 
   focusWindow(windowElement);
   bindWindow(windowElement);
+  if (id === 'about') enhanceAboutPage(windowElement);
+}
+
+function enhanceAboutPage(windowElement) {
+  const skillStamp = windowElement.querySelector('.skill-stamp span');
+  if (skillStamp) skillStamp.innerHTML = '<b>01</b> Brief the problem and constraints.<br /><b>02</b> Map the architecture with an LLM.<br /><b>03</b> Delegate small, testable tasks across tools.<br /><b>04</b> Review the output, run it, and keep the decisions human.';
+
+  const photoGrid = windowElement.querySelector('.about-photo-grid');
+  if (photoGrid) {
+    const teamCaption = photoGrid.querySelector('.photo-tall figcaption');
+    if (teamCaption) teamCaption.textContent = 'International Relations';
+    const firstModelUnCaption = photoGrid.querySelector('.about-photo-stack .about-photo:first-child figcaption');
+    if (firstModelUnCaption) firstModelUnCaption.textContent = 'Model UN';
+    photoGrid.insertAdjacentHTML('beforeend', '<figure class="about-photo photo-model-un"><img src="international.jpeg" alt="Saswat speaking at a Model UN conference" /><figcaption>Model UN</figcaption></figure>');
+    const internationalCaption = photoGrid.querySelector('.photo-model-un figcaption');
+    if (internationalCaption) internationalCaption.textContent = 'International relations';
+  }
 }
 
 function bindWindow(windowElement) {
@@ -275,15 +293,15 @@ function escapeHtml(value) { return value.replace(/[&<>"']/g, (character) => ({ 
 
 function finishBoot() {
   if (bootScreen.classList.contains('is-done')) return;
+  bootTimers.forEach((timer) => clearTimeout(timer));
+  bootTimers = [];
   bootScreen.classList.add('is-done');
+  document.body.classList.remove('is-booting');
+  document.body.classList.add('is-booted');
   renderWindow('about');
-  renderWindow('resume');
   const aboutWindow = document.querySelector('[data-window="about"]');
-  const resumeWindow = document.querySelector('[data-window="resume"]');
   selectApp(document.querySelector('.dock-item[data-open="about"]'));
-  selectApp(document.querySelector('.dock-item[data-open="resume"]'));
   focusWindow(aboutWindow);
-  aboutWindow.style.zIndex = String(Number(resumeWindow.style.zIndex || 0) + 1);
 }
 
 function runBoot() {
@@ -297,10 +315,10 @@ function runBoot() {
     ['welcome, user', 'ready'],
   ];
   sessionStorage.removeItem('portfolio-booted');
-  lines.forEach(([label, status], index) => setTimeout(() => {
+  lines.forEach(([label, status], index) => bootTimers.push(setTimeout(() => {
     bootLog.insertAdjacentHTML('beforeend', `<div class="boot-line"><span class="boot-label">${label}</span><span class="boot-status">${status}</span></div>`);
-  }, index * 220));
-  setTimeout(finishBoot, 1900);
+  }, index * 220)));
+  bootTimers.push(setTimeout(finishBoot, 1900));
 }
 
 function selectApp(button) {
@@ -338,6 +356,7 @@ document.addEventListener('keydown', (event) => {
     finishBoot();
   }
 });
+bootScreen.addEventListener('click', finishBoot);
 updateClock();
 setInterval(updateClock, 30000);
 shutdownButton?.addEventListener('click', () => window.location.reload());
